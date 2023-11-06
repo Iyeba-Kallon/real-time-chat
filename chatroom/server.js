@@ -1,27 +1,3 @@
-// const express = require("express");
-// const path = require("path");
-
-// const app = express();
-// const server = require("http").createServer(app);
-
-
-// const io = require("socket.io")(server);
-
-// app.use(express.static(path.join(__dirname+"/public")));
-
-// io.on("connection", function(socket){
-//     socket.on("newuser",function(username){
-//         socket.broadcast.emit("update", username + " joined the conversation");
-//     });
-//     socket.on("exituser",function(username){
-//         socket.broadcast.emit("update", username + " left the conversation");
-//     });
-//     socket.on("chat",function(message){
-//         socket.broadcast.emit("chat", message);
-//     });
-// })
-
-// server.listen(5000);
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
@@ -39,8 +15,16 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   console.log('a user connected');
 
-  socket.on('chat message', (msg) => {
-    io.emit('chat message', msg);
+  socket.on('newuser', (username) => {
+    io.emit('update', username + ' joined the conversation');
+  });
+
+  socket.on('exituser', (username) => {
+    io.emit('update', username + ' left the conversation');
+  });
+
+  socket.on('chat', (message) => {
+    io.emit('chat', message);
   });
 
   socket.on('disconnect', () => {
